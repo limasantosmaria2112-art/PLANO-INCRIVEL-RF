@@ -7,7 +7,7 @@
 ## Fase 1 — Mundo (semana 3–4)
 - Mapas no Tiled (City, Bar, Trail, Kids' House), colisões, câmera
 - NPC garçom + DialogueSystem (caixa de texto), quest "A Bebida"
-- Troca de controle entre Lilly e Kielop (tecla dedicada)
+- **Troca de controle via SwapZone** (mesa tranquila + diálogo icônico) ✅ base implementada
 
 ## Fase 2 — Combate (semana 5–7)
 - `BattleScene`: menu com **timer de 5s** (atacar/curar/skill/fugir)

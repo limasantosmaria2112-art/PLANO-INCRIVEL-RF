@@ -1,0 +1,16 @@
+{
+  "name": "plano-incrivel-rf",
+  "version": "0.1.0",
+  "private": true,
+  "description": "RPG 2D top-down: Lilly (metamorfa) & Kielop (copia habilidades)",
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w client",
+    "build": "npm run build -w client && npm run build -w server",
+    "test": "npm run test -w client"
+  }
+}

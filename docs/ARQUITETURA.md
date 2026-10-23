@@ -32,10 +32,12 @@ src/
 │   └── entities/Enemy.ts
 ├── systems/
 │   ├── CombatSystem.ts      # turnos + timer de 5s
+│   ├── DuplaManager.ts      # controle ativo/follower + troca via SwapZone ✅
+│   ├── DialogueSystem.ts    # caixa de diálogo, falas sequenciais ✅
+│   ├── SwapZone.ts          # locais tranquilos onde a troca acontece ✅
 │   ├── MetamorphosisSystem.ts
 │   ├── CopySkillSystem.ts
 │   ├── InventorySystem.ts
-│   ├── DialogueSystem.ts    # árvores de diálogo + cutscenes
 │   ├── QuestSystem.ts
 │   └── SaveSystem.ts
 ├── scenes/

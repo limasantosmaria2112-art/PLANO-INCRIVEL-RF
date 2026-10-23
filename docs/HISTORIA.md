@@ -25,6 +25,21 @@ finalmente bebendo a bebida desejada e conversando.
 - Tutorial: movimentar a dupla, falar com NPCs (garçom), caixa de diálogo.
 - Quest: *"Recuperar a Bebida Especial"* → journal do jogador.
 
+## ⭐ Mecânica central: "Refúgio de Troca" (SwapZone)
+
+A troca de personagem **não é uma tecla** — acontece em **lugares tranquilos**
+(bar, casa de uma senhorinha, banco de praça), onde a dupla senta e conversa:
+
+> *Chegam na mesa → sentam →*
+> **LILLY:** "KIELOP POR FAVOR ME DEIXA ASSUMIR O COMANDO VAIIII" → controles mudam ✅
+
+- Cada `SwapZone` no mapa tem seu próprio diálogo (bar = cômico, casa da
+  senhorinha = lore calmo, banco = papo aleatório).
+- Trocar de controle exige "parada" num lugar seguro → ritmo de exploração
+  e valorização dos refúgios.
+- No prólogo, o **primeiro SwapZone do jogo** é a mesa do bar no Ato 5;
+  o segundo (tutorial) aparece logo na Fase 1.
+
 ## Ato 2 — A Trilha 🌳 (tutorial de combate)
 
 - 2–3 encontros com inimigos fracos (ratos de esgoto, frutas furiosas etc.).
