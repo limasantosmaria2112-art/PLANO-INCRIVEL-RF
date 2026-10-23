@@ -4,10 +4,12 @@
 - Setup monorepo, Vite + Phaser rodando, ESLint, Prisma conectado ao Postgres do Render
 - Classes `Entity`, `Player`, `Lilly`, `Kielop` com movimento básico
 
-## Fase 1 — Mundo (semana 3–4)
-- Mapas no Tiled (City, Bar, Trail, Kids' House), colisões, câmera
-- NPC garçom + DialogueSystem (caixa de texto), quest "A Bebida"
-- **Troca de controle via SwapZone** (mesa tranquila + diálogo icônico) ✅ base implementada
+## Fase 1 — Mundo (semana 3–4) ✅ IMPLEMENTADA
+- Mapas encadeados via código (Bar = Every's Tipsy, City/praça, Trail, KidsHouse),
+  colisões, câmera, portas entre cenas — Tiled entra depois para arte final
+- **Evy o barman raposa 🦊** com diálogo em camadas (quest + conversas repetíveis)
+- NPC + DialogueSystem (caixa de texto), quest "A Bebida" com HUD
+- **Troca de controle via SwapZone** (mesa do bar + banco da praça, diálogo icônico) ✅
 
 ## Fase 2 — Combate (semana 5–7)
 - `BattleScene`: menu com **timer de 5s** (atacar/curar/skill/fugir)

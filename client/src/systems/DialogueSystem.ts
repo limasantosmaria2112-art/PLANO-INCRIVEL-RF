@@ -29,6 +29,7 @@ export class DialogueSystem {
     this.box = scene.add
       .container(scene.scale.width / 2, scene.scale.height - 130, [bg, nameText, bodyText, this.textHint])
       .setDepth(900)
+      .setScrollFactor(0)
       .setVisible(false);
     this.box.setData("name", nameText).setData("body", bodyText);
   }

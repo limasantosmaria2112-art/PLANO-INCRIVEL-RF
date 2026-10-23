@@ -25,7 +25,7 @@ export class MenuScene extends Phaser.Scene {
       .setOrigin(0.5);
     this.tweens.add({ targets: start, alpha: 0.3, duration: 700, yoyo: true, repeat: -1 });
 
-    const go = () => this.scene.start("World");
+    const go = () => this.scene.start("Bar");
     this.input.once("pointerdown", go);
     this.input.keyboard!.once("keydown-ENTER", go);
   }

@@ -24,28 +24,29 @@ PLANO-INCRIVEL-RF/
 ```
 src/
 ├── entities/
-│   ├── Entity.ts            # classe base
-│   ├── Player.ts            # abstrata — Lilly e Kielop herdam
-│   ├── entities/Lilly.ts    # metamorfa: troca de formas
-│   ├── entities/Kielop.ts   # copia habilidades de inimigos
-│   ├── entities/Npc.ts
-│   └── entities/Enemy.ts
+│   ├── Entity.ts            # classe base ✅
+│   ├── Player.ts            # abstrata — Lilly e Kielop herdam ✅
+│   ├── entities/Lilly.ts    # metamorfa: troca de formas ✅ (formas: Fase 2+)
+│   ├── entities/Kielop.ts   # copia habilidades de inimigos ✅ (cópia: Fase 2+)
+│   ├── entities/Npc.ts      # NPCs com interações em camadas ✅ (Evy o barman 🦊)
 ├── systems/
-│   ├── CombatSystem.ts      # turnos + timer de 5s
+│   ├── CombatSystem.ts      # turnos + timer de 5s (Fase 2)
 │   ├── DuplaManager.ts      # controle ativo/follower + troca via SwapZone ✅
 │   ├── DialogueSystem.ts    # caixa de diálogo, falas sequenciais ✅
-│   ├── SwapZone.ts          # locais tranquilos onde a troca acontece ✅
-│   ├── MetamorphosisSystem.ts
-│   ├── CopySkillSystem.ts
-│   ├── InventorySystem.ts
-│   ├── QuestSystem.ts
-│   └── SaveSystem.ts
-├── scenes/
-│   ├── BootScene.ts
-│   ├── MenuScene.ts
-│   ├── WorldScene.ts
-│   ├── BattleScene.ts
-│   └── UIScene.ts
+│   ├── SwapZone             # locais tranquilos p/ troca (em BaseDuplaScene) ✅
+│   ├── QuestSystem.ts       # quest "A Bebida" sequencial ✅
+│   ├── MetamorphosisSystem.ts   # Fase 2+ (revelação gradual do poder!)
+│   ├── CopySkillSystem.ts       # Fase 2+
+│   ├── InventorySystem.ts       # Fase 3
+│   └── SaveSystem.ts            # Fase 3
+├── scenes/                  # fluxo do pró-ogo: cenas encadeadas ✅
+│   ├── BootScene / MenuScene
+│   ├── BarScene             # Ato 1 — Evy 🦊 + quest + 1ª SwapZone ✅
+│   ├── CityScene            # praça: casas, banco SwapZone, porta da trilha ✅
+│   ├── TrailScene           # Ato 2 — trilha (nexos/combates na Fase 2) ✅
+│   ├── KidsHouseScene       # Ato 3 — círculo do ritual + crianças ✅
+│   ├── BattleScene          # Fase 2 — combate híbrido
+│   └── UIScene              # Fase 2+
 ├── ui/
 └── core/                    # GameConfig, EventBus, ResourceManager
 ```

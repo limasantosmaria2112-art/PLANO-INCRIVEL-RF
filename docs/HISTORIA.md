@@ -19,13 +19,15 @@ finalmente bebendo a bebida desejada e conversando.
 └── [4] BAR (interior) — abre e fecha o prólogo
 ```
 
-## Ato 1 — O Bar 🍺 (tutorial suave)
+## Personagens
 
-- Interior do bar; Kielop já no balcão, Lilly entra e pede a mesma bebida.
-- Tutorial: movimentar a dupla, falar com NPCs (garçom), caixa de diálogo.
-- Quest: *"Recuperar a Bebida Especial"* → journal do jogador.
+### 🦊 Evy — o barman (raposa com corpo de humano)
+- Amigável e conversador; **tem interações em camadas**: fala da quest, conversas
+  aleatórias repetíveis ("sabia que raposa com corpo de humano...") e falas
+  diferentes conforme o progresso (antes/depois da trilha/depois do Cerberus).
+- Nome definitivo: **Evy**.
 
-## ⭐ Mecânica central: "Refúgio de Troca" (SwapZone)
+### ⭐ Mecânica central: "Refúgio de Troca" (SwapZone)
 
 A troca de personagem **não é uma tecla** — acontece em **lugares tranquilos**
 (bar, casa de uma senhorinha, banco de praça), onde a dupla senta e conversa:
@@ -33,12 +35,38 @@ A troca de personagem **não é uma tecla** — acontece em **lugares tranquilos
 > *Chegam na mesa → sentam →*
 > **LILLY:** "KIELOP POR FAVOR ME DEIXA ASSUMIR O COMANDO VAIIII" → controles mudam ✅
 
-- Cada `SwapZone` no mapa tem seu próprio diálogo (bar = cômico, casa da
-  senhorinha = lore calmo, banco = papo aleatório).
-- Trocar de controle exige "parada" num lugar seguro → ritmo de exploração
+- Cada `SwapZone` no mapa tem seu próprio diálogo (bar = mesa tranquila,
+  praça = banco). SwapZones já implementadas: **mesa do bar** (Ato 1) e
+  **banco da praça** (City).
+- Trocar de controle exige uma "parada" num lugar seguro → ritmo de exploração
   e valorização dos refúgios.
-- No prólogo, o **primeiro SwapZone do jogo** é a mesa do bar no Ato 5;
-  o segundo (tutorial) aparece logo na Fase 1.
+
+### 🧬 O poder da Lilly — oculto dos jogadores
+
+Metamorfose para **qualquer coisa, viva ou morta** — mas os jogadores descobrem
+aos poucos:
+
+- **Fase 1 (prólogo):** só formas pequenas de animais (gatinho para buracos) —
+  *jogador acha: "ela vira bicho"*
+- **Fase 2:** plantas/objetos vivos (árvore para pontes quebradas)
+- **Fase 3:** coisas **inanimadas** (cadeira, estátua) — momento "WHOA, ELA VIRA QUALQUER COISA?!"
+- **Revelação:** poder é ilimitado; desbloqueio segue confiança da própria Lilly
+  (gating narrativo → nunca há exploits, e a limitação tem sempre "des-culpa" de lore).
+
+### 😀 Personalidades (contraste)
+
+| | Lilly 🌸 | Kielop 🌀 |
+|---|---|---|
+| Temperamento | **Animada, caótica, impulsiva** ("VAIIII") | **Tranquilo, seco, sarcástico** |
+| Poder | Metamorfose oculta/ilimitada | Copia habilidades |
+| Energia no diálogo | CAPS e exclamações | "..." e respostas mansas |
+| Nas trocas | Quem SEMPRE quer assumir o comando | Quem relutante aceita |
+
+## Ato 1 — O Bar 🍺 (tutorial suave)
+
+- Interior do bar; Kielop já no balcão, Lilly entra e pede a mesma bebida.
+- Tutorial: movimentar a dupla, falar com NPCs (garçom), caixa de diálogo.
+- Quest: *"Recuperar a Bebida Especial"* → journal do jogador.
 
 ## Ato 2 — A Trilha 🌳 (tutorial de combate)
 
