@@ -1,5 +1,23 @@
 # PLANO-INCRIVEL-RF (2026)
-PLANO PERFEITO MARAVILHOSO FEITO EM EXTREME GO HORSE FUNCIONANDO A BASE DE UM RATO CORRENDO EM UMA ESTEIRA COMO FONTE DE ENERGIA (isso é ironia)
 
+RPG 2D top-down em TypeScript (POO), feito em Phaser 3, com Lilly (metamorfa) e Kielop (copia habilidades) andando em dupla.
 
-jogo em POO rpg onde vamos poder andar pelo mapa e lutar com alguns inimigos, interagir com npcs e etc. Tem dois personagensjogaveis que andam em dupla, Lilly e Kielop. Vez ou outra vc pode trocar quem voce controla. Lilly é um metamorfo e Kielop um humano normal que consegue copiar habilidades.
+- Combate **híbrido por turnos com timer** (ex: 5s para decidir a ação)
+- Frontend: Phaser 3 + Vite | Backend: Node + Express | Banco: PostgreSQL no Render.com
+
+## Documentação
+
+| Doc | Conteúdo |
+|---|---|
+| [docs/HISTORIA.md](docs/HISTORIA.md) | Lore completo, prólogo "A Bebida", atos 1–5 |
+| [docs/ARQUITETURA.md](docs/ARQUITETURA.md) | Monorepo, estrutura de classes POO, padrões de projeto |
+| [docs/FERRAMENTAS.md](docs/FERRAMENTAS.md) | Engine, editores, arte, áudio e deploy |
+| [docs/BANCO-DE-DADOS.md](docs/BANCO-DE-DADOS.md) | Schema SQL, ORM e endpoints da API |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Fases de desenvolvimento, semana a semana |
+
+## Personagens
+
+- **Lilly** — metamorfa: assume formas animais (gatinho, slide) para navegar o mundo e resistir a efeitos.
+- **Kielop** — humano normal que **copia habilidades** de inimigos derrotados.
+
+> *"Tudo começou com uma bebida roubada... e um cachorrinho que não devia ter sido revivido."*
