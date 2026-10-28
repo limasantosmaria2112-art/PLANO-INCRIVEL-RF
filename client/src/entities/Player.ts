@@ -10,10 +10,15 @@ export abstract class Player extends Entity {
   readonly id: CharacterId;
   readonly label: string;
 
+  /** vida atual — usada pelo BattleSystem */
+  hp: number;
+  maxHp = 40;
+
   constructor(scene: Phaser.Scene, x: number, y: number, color: number, id: CharacterId, label: string) {
     super(scene, x, y, color);
     this.id = id;
     this.label = label;
+    this.hp = this.maxHp;
     // caixinha com a inicial pra identificar visualmente
     const tag = scene.add.text(this.sprite.x, this.sprite.y - 22, label[0], {
       fontSize: "10px",

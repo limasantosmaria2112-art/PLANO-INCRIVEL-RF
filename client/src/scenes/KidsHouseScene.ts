@@ -8,6 +8,10 @@ import type { QuestionDialogueLine } from "shared";
  * NÃO há combate com elas: confissão do ritual + cutscene do círculo.
  */
 export class KidsHouseScene extends BaseDuplaScene {
+  constructor() {
+    super("KidsHouse");
+  }
+
   protected get locationName(): string {
     return "CASA AO FIM DA TRILHA";
   }

@@ -1,11 +1,48 @@
 import Phaser from "phaser";
 import { BaseDuplaScene } from "./BaseDuplaScene";
+import type { EnemyDef } from "../entities/Enemy";
 
 /**
  * TrailScene — Ato 2: trilha perigosa entre a praça e a casa das crianças.
- * (Os imprevistos/combates entram na Fase 2 — por ora é uma caminhada tensa.)
+ * Fase 2 chegou: bandido e bicho bravo patrulham a trilha (combate por turnos).
  */
 export class TrailScene extends BaseDuplaScene {
+  private static readonly BANDIDO: EnemyDef = {
+    id: "bandido",
+    name: "Bandido Magro",
+    color: 0x9e6b58,
+    maxHp: 26,
+    power: 6,
+    grants: {
+      name: "Cacetada",
+      power: 14,
+      lines: [
+        { speaker: "kielop", text: "Eita... essa CACETADA agora é minha. Tá copiada, tá salva." },
+        { speaker: "lilly", text: "Ele copiou até brutalidade, esse menino é um capacho de conhecimento!" }
+      ]
+    }
+  };
+
+  private static readonly CACHORRINHO: EnemyDef = {
+    id: "cachorrinho",
+    name: "Cachorrinho Revivido 🐶",
+    color: 0xd08b3a,
+    maxHp: 34,
+    power: 8,
+    grants: {
+      name: "Rosnado Sônico",
+      power: 17,
+      lines: [
+        { speaker: "kielop", text: "O cachorrinho que não devia ter sido revivido... e agora me dá poder sônico." },
+        { speaker: "lilly", text: "NAPUTA, KIELOP PEGOU O ATAQUE DO BEIJO DA MORTE." }
+      ]
+    }
+  };
+
+  constructor() {
+    super("Trail");
+  }
+
   protected get locationName(): string {
     return "TRILHA LESTE";
   }
@@ -35,11 +72,15 @@ export class TrailScene extends BaseDuplaScene {
 
     this.addZone(760, 620, 200, 90, "placa — [E] ler", () => {
       this.dialogue.start([
-        { speaker: "npc", text: "(placa) 'CUIDADO — bandidos e bichos bravos. Combates chegando na Fase 2!'" },
+        { speaker: "npc", text: "(placa) 'CUIDADO — BANDIDO MAGRO e o CACHORRINHO REVIVIDO patrulham à frente. Dica: [A] bate, [B] é o especial, [F] foge; quem vence copia!'" },
         { speaker: "lilly", text: "AÍ SIM! QUERO BATER GENTE!!" },
-        { speaker: "kielop", text: "...isso vai contra o conceito de segurança." }
+        { speaker: "kielop", text: "...não é 'bater gente', é aprendizado tático. Por mim, ok." }
       ]);
     });
+
+    // fases chegaram: bicho bravo e bandido patrulham a trilha
+    this.addEnemy(430, 450, TrailScene.BANDIDO, [{ x: 360, y: 450 }, { x: 640, y: 450 }]);
+    this.addEnemy(1330, 470, TrailScene.CACHORRINHO, [{ x: 1290, y: 470 }, { x: 1600, y: 470 }]);
 
     // caminhadinha: luz de vaga-lume decorativa
     for (const [x, y] of [[400, 320], [1200, 480]] as [number, number][]) {

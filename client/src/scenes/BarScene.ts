@@ -9,6 +9,10 @@ import { quest } from "../systems/QuestSystem";
  * e dispara a quest "A Bebida".
  */
 export class BarScene extends BaseDuplaScene {
+  constructor() {
+    super("Bar");
+  }
+
   protected get locationName(): string {
     return "EVERY'S TIPSY — interior";
   }

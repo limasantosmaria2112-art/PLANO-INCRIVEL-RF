@@ -7,6 +7,10 @@ import { quest } from "../systems/QuestSystem";
  * e a porta da trilha leste (travada até a quest ser aceita com Evy).
  */
 export class CityScene extends BaseDuplaScene {
+  constructor() {
+    super("City");
+  }
+
   protected get locationName(): string {
     return "PRAÇA DA CIDADEZINHA";
   }
