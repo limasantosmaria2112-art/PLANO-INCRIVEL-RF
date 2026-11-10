@@ -5,7 +5,7 @@ app.use(express.json());
 const port = process.env.PORT ?? 3001;
 
 // Fase 3: Prisma + Postgres no Render. Por ora: endpoints de health e mock de save.
-app.get("/health", (_req, res) => res.json({ ok: true, game: "PLANO-INCRIVEL-RF" }));
+app.get("/health", (_req, res) => res.json({ ok: true, game: "RuPtuRa-FononiCa" }));
 
 interface SaveRequest {
   playerId: string;

@@ -12,7 +12,7 @@
 Monorepo (npm workspaces):
 
 ```
-PLANO-INCRIVEL-RF/
+RuPtuRa-FononiCa/
 ├── client/          # jogo Phaser 3 (TypeScript + Vite)
 ├── server/          # API REST (Node + Express + TS)
 ├── shared/          # tipos, mecânicas e economia compartilhados

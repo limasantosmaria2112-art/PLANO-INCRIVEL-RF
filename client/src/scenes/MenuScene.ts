@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 
 /**
- * MenuScene — tela de início. Fundo estrelado, título com glow,
- * os dois personagens dando as caras e um botão de COMEÇAR de verdade.
+ * MenuScene — tela de início. Fundo do bar (âmbar e vermelho profundo),
+ * título neon, os dois personagers em cartões flutuantes, e botões de COMEÇAR/CONFIGURAÇÕES.
  */
 export class MenuScene extends Phaser.Scene {
   constructor() {
@@ -12,119 +12,150 @@ export class MenuScene extends Phaser.Scene {
   create(): void {
     const { width, height } = this.scale;
 
-    this.add.rectangle(width / 2, height / 2, width, height, 0x14162b);
+    // Fundo do bar: gradiente vermelho escuro -> âmbar
+    this.add.rectangle(width / 2, height / 2, width, height, 0x8B0000);
+    this.add.rectangle(width / 2, height * 0.62, width, height * 0.4, 0xFFD700);
 
-    // faixa de fundo levemente deslocada (não é escuro chapado)
-    this.add.rectangle(width / 2, height * 0.62, width, height * 0.4, 0x1b1d3a);
-
-    // vinheta (bordas escurecendo)
+    // Vingeta (bordas escurecendo)
     this.add.rectangle(width / 2, 0, width, 70, 0x0a0b14, 0.45);
     this.add.rectangle(width / 2, height, width, 70, 0x0a0b14, 0.45);
     this.add.rectangle(0, height / 2, 70, height, 0x0a0b14, 0.45);
     this.add.rectangle(width, height / 2, 70, height, 0x0a0b14, 0.45);
 
-    // estrelinhas piscando
-    for (let i = 0; i < 55; i++) {
-      const s = this.add.circle(
-        Phaser.Math.Between(10, width - 10),
-        Phaser.Math.Between(10, height - 10),
-        Phaser.Math.FloatBetween(0.6, 1.9),
-        Phaser.Utils.Array.GetRandom([0xffffff, 0xffd75e, 0x9de8ff]),
-        Phaser.Math.FloatBetween(0.25, 0.9)
+    // Abas luminosas do bar (botijões e luzes)
+    for (let i = 0; i < 8; i++) {
+      const lamp = this.add.circle(
+        Phaser.Math.Between(100, width - 100),
+        Phaser.Math.Between(50, height * 0.6),
+        Phaser.Math.FloatBetween(150, 280),
+        Phaser.Utils.Array.GetRandom([0xFFD700, 0xFF6B35, 0xFFFFFF]),
+        Phaser.Math.FloatBetween(0.08, 0.18)
       );
       this.tweens.add({
-        targets: s,
-        alpha: 0.05,
-        duration: Phaser.Math.Between(500, 1800),
+        targets: lamp,
+        alpha: { from: 0.1, to: 0.20 },
+        duration: Phaser.Math.Between(800, 2000),
         yoyo: true,
         repeat: -1,
-        delay: Phaser.Math.Between(0, 900)
+        delay: Phaser.Math.Between(0, 1000),
+        ease: "Sine.inOut"
       });
     }
 
-    // título com glow pulsante
+    // Título neon pulsante
     const title = this.add
-      .text(width / 2, 130, "PLANO-INCRIVEL-RF", {
-        fontSize: "46px",
-        color: "#ffd75e",
+      .text(width / 2, 110, "RuPtuRa-FononiCa", {
+        fontSize: "56px",
+        color: "#FFD700",
         fontStyle: "bold",
-        stroke: "#0a0b14",
-        strokeThickness: 6,
+        stroke: "#FFD700",
+        strokeThickness: 8,
         align: "center"
       })
       .setOrigin(0.5);
-    title.setShadow(0, 0, "#ffd75e", 26, true, true);
-    this.tweens.add({ targets: title, y: "+=4", duration: 1400, yoyo: true, repeat: -1, ease: "Sine.inOut" });
+    title.setShadow(0, 0, "#FFD700", 32, true, true);
+    // Efeito neon pulsante (rápido)
+    this.tweens.add({ targets: title, alpha: { from: 0.8, to: 1 }, duration: 600, yoyo: true, repeat: -1 });
+    this.tweens.add({ targets: title, scale: { from: 0.98, to: 1.02 }, duration: 800, yoyo: true, repeat: -1, ease: "Sine.inOut" });
+    // Texto deslizando
+    this.tweens.add({ targets: title, y: "+=6", duration: 1600, yoyo: true, repeat: -1, ease: "Sine.inOut" });
 
     // subtítulo
     this.add
-      .text(width / 2, 185, "Lilly & Kielop — prólogo: a Bebida", { fontSize: "16px", color: "#c9d1f2" })
+      .text(width / 2, 185, "Lilly & Kielop — prólogo: a Bebida", { fontSize: "16px", color: "#FFE4B5" })
       .setOrigin(0.5);
 
-    // a dupla dando as caras (quadros animados)
-    this.makePortrait(260, 320, 0xff77a9, "L", "Lilly", 0);
-    this.makePortrait(340, 360, 0x5bc8ff, "K", "Kielop", 240);
+    // cartões flutuantes dos personagens
+    this.makePortrait(200, 320, 0xFF69B4, "LILLY", "Mario", 0);
+    this.makePortrait(300, 360, 0x1E90FF, "KIEL", "Lilly", 250);
 
-    // botão de COMEÇAR real (hover + clique ou ENTER/ESPAÇO)
-    const btn = this.add.rectangle(width / 2, 400, 260, 58, 0x2a2f4a).setStrokeStyle(3, 0x8d5524);
-    const btnText = this.add
-      .text(width / 2, 400, "COMEÇAR", { fontSize: "24px", color: "#ffd75e", fontStyle: "bold" })
-      .setOrigin(0.5);
-    const btnGlow = this.add.rectangle(width / 2, 400, 260, 58, 0xffd75e, 0).setStrokeStyle(3, 0xffd75e);
+    // Botão COMEÇAR
+    this.makeButton(width / 2, 460, "COMEÇAR", 0x2a2f4a, 0xFFD700, this.gotoBar.bind(this));
 
-    const go = () => this.scene.start("Bar");
+    // Botão CONFIGURAÇÕES
+    this.makeButton(width / 2, 540, "CONFIGURAÇÕES", 0x2a2f4a, 0x4ECDC4, this.gotoConfig.bind(this));
 
-    btn.setInteractive({ useHandCursor: true });
-    btn.on("pointerover", () => {
-      btnGlow.setAlpha(0.16);
-      btn.setFillStyle(0x3a4066);
-      btnText.setColor("#ffffff");
-      this.tweens.add({ targets: [btn, btnText], scale: 1.05, duration: 90 });
-    });
-    btn.on("pointerout", () => {
-      btnGlow.setAlpha(0);
-      btn.setFillStyle(0x2a2f4a);
-      btnText.setColor("#ffd75e");
-      this.tweens.add({ targets: [btn, btnText], scale: 1, duration: 90 });
-    });
-    btn.on("pointerdown", go);
-
-    // pisca suave pra chamar atenção
-    this.tweens.add({ targets: btnGlow, alpha: { from: 0, to: 0.1 }, duration: 900, yoyo: true, repeat: -1 });
-
+    // Controles de teclado
     this.add
-      .text(width / 2, 470, "clique no botão ou pressione ENTER", { fontSize: "12px", color: "#9aa4c0" })
+      .text(width / 2, 610, "WASD/setas: mover   ·   E: falar/interagir   ·   Luta: [A]taca [B]especial [G]cura [F]foge", { fontSize: "12px", color: "#AAAAAA" })
       .setOrigin(0.5);
-    this.add.text(
-      12,
-      height - 26,
-      "WASD/setas: mover   ·   E: falar/interagir   ·   luta: [A]taca [B]especial [G]cura [F]foge",
-      { fontSize: "11px", color: "#9aa4c0" }
-    );
+    this.add
+      .text(width / 2, 630, "ENTER: começa | ESC: configurações", { fontSize: "12px", color: "#AAAAAA" })
+      .setOrigin(0.5);
 
-    this.input.keyboard!.once("keydown-ENTER", go);
-    this.input.keyboard!.once("keydown-SPACE", go);
+    // Eventos de teclado
+    this.input.keyboard!.once("keydown-ENTER", this.gotoBar.bind(this));
+    this.input.keyboard!.once("keydown-SPACE", this.gotoBar.bind(this));
+    this.input.keyboard!.once("keydown-ESCAPE", this.gotoConfig.bind(this));
   }
 
-  /** quadro animado de personagem (placeholder até termos sprites) */
+  /** sprite/memória animada do personagem */
   private makePortrait(x: number, y: number, color: number, letter: string, label: string, delay: number): void {
-    const frame = this.add.rectangle(x, y, 64, 84, 0x0f1120).setStrokeStyle(3, color);
-    this.add.rectangle(x, y, 40, 54, color).setStrokeStyle(2, 0xffffff);
-    this.add
-      .text(x, y, letter, { fontSize: "20px", color: "#0f1120", fontStyle: "bold" })
-      .setOrigin(0.5);
-    this.add.text(x, y + 56, label, { fontSize: "13px", color: "#c9d1f2" }).setOrigin(0.5);
+    const frame = this.add.rectangle(x, y, 90, 120, 0x1a0505).setStrokeStyle(4, color);
+    // Brilho no cartão
+    this.add.rectangle(x, y, 84, 114, color, 0)  // Layer branco suave
+      .setStrokeStyle(3, color);
 
-    // "respirar" dos dois, dessincronizados
+    // Thumbnail do personagem (cor quadrada)
+    this.add.rectangle(x, y, 50, 70, color).setStrokeStyle(2, 0xFFFFFF);
+
+    // Letra inicial
+    const letterText = this.add
+      .text(x, y, letter, { fontSize: "28px", color: "#1a0505", fontStyle: "bold" })
+      .setOrigin(0.5);
+
+    // Nome do personagem
+    const nameLabel = this.add.text(x, y + 60, label, { fontSize: "14px", color: "#FFE4B5", fontStyle: "bold" }).setOrigin(0.5);
+
+    // Efeito de "respirar" (pulsar suavemente)
     this.tweens.add({
-      targets: frame,
-      y: "-=5",
-      scaleX: 1.03,
-      duration: 1200,
+      targets: [frame, letterText, nameLabel],
+      y: "-=6",
+      scaleX: 1.04,
+      duration: 1500,
       yoyo: true,
       repeat: -1,
       delay,
       ease: "Sine.inOut"
     });
+  }
+
+  /** botão com hover e efeito glow */
+  private makeButton(x: number, y: number, text: string, bg: number, glow: number, action: () => void): void {
+    const bgBox = this.add.rectangle(x, y, 260, 50, bg).setStrokeStyle(2, glow);
+    const label = this.add
+      .text(x, y, text, { fontSize: "22px", color: glow.toString(16).padStart(6, "0"), fontStyle: "bold" })
+      .setOrigin(0.5);
+
+    const glowBox = this.add.rectangle(x, y, 260, 50, glow, 0).setStrokeStyle(2, glow);
+
+    bgBox.setInteractive({ useHandCursor: true });
+
+    bgBox.on("pointerover", () => {
+      glowBox.setAlpha(0.2);
+      bgBox.setFillStyle(0x3a4066);
+      label.setColor(glow.toString(16).padStart(6, "0"));
+      this.tweens.add({ targets: [bgBox, label], scale: 1.08, duration: 120 });
+    });
+
+    bgBox.on("pointerout", () => {
+      glowBox.setAlpha(0);
+      bgBox.setFillStyle(bg);
+      label.setColor(glow.toString(16).padStart(6, "0"));
+      this.tweens.add({ targets: [bgBox, label], scale: 1, duration: 120 });
+    });
+
+    bgBox.on("pointerdown", action);
+
+    // Pisca suave para chamar atenção
+    this.tweens.add({ targets: glowBox, alpha: { from: 0, to: 0.15 }, duration: 800, yoyo: true, repeat: -1 });
+  }
+
+  private gotoBar(): void {
+    this.scene.start("Bar");
+  }
+
+  private gotoConfig(): void {
+    this.scene.start("Config");
   }
 }

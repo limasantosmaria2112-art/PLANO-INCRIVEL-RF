@@ -2,6 +2,7 @@ import Phaser from "phaser";
 
 import { BootScene } from "../scenes/BootScene";
 import { MenuScene } from "../scenes/MenuScene";
+import { ConfigScene } from "../scenes/ConfigScene";
 import { BarScene } from "../scenes/BarScene";
 import { CityScene } from "../scenes/CityScene";
 import { TrailScene } from "../scenes/TrailScene";
@@ -22,13 +23,22 @@ export function createGame(parent: HTMLElement): Phaser.Game {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [BootScene, MenuScene, BarScene, CityScene, TrailScene, KidsHouseScene],
+    scene: [BootScene, MenuScene, ConfigScene, BarScene, CityScene, TrailScene, KidsHouseScene],
     physics: {
       default: "arcade",
       arcade: { debug: false }
     }
   });
-  // acesso de dev/testes (console): window.__planoGame.scene.start("Trail")
-  (window as unknown as { __planoGame?: Phaser.Game }).__planoGame = game;
+
+  // Configurações globais do jogo
+  game.globals = {
+    volumeMan: 50,
+    volumeBgm: 70,
+    volumeSfx: 80,
+    fullscreen: false
+  };
+
+  // acesso de dev/testes (console): window.__phononicaGame.scene.start("Trail")
+  (window as unknown as { __phononicaGame?: Phaser.Game }).__phononicaGame = game;
   return game;
 }
