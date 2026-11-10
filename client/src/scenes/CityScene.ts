@@ -23,17 +23,23 @@ export class CityScene extends BaseDuplaScene {
       spawn: { x: data?.x ?? 480, y: data?.y ?? 620 }
     });
 
-    // prédios decorativos
+    // prédios DECORATIVOS que agora são sólidos (nada de colisão fantasma)
+    const props = (this.wallsGroup ??= this.physics.add.staticGroup());
     this.add.rectangle(280, 210, 190, 150, 0x3a3f63).setStrokeStyle(3, 0x8d5524);
     this.add.text(280, 210, "CASA DA\nSENHORINHA", { fontSize: "10px", color: "#c9d1f2", align: "center" }).setOrigin(0.5);
+    props.add(this.add.rectangle(280, 210, 190, 150, 0x3a3f63, 0.001));
     this.add.rectangle(600, 180, 160, 120, 0x3a3f63).setStrokeStyle(3, 0x8d5524);
     this.add.text(600, 180, "LOJA", { fontSize: "12px", color: "#c9d1f2" }).setOrigin(0.5);
+    props.add(this.add.rectangle(600, 180, 160, 120, 0x3a3f63, 0.001));
     this.add.rectangle(980, 210, 220, 140, 0x3a3f63).setStrokeStyle(3, 0x8d5524);
     this.add.text(980, 210, "(workspace\nfuturo)", { fontSize: "10px", color: "#5d628c", align: "center" }).setOrigin(0.5);
+    props.add(this.add.rectangle(980, 210, 220, 140, 0x3a3f63, 0.001));
 
-    // árvores
-    for (const x of [160, 780, 1240])
-      this.add.circle(x, 300, 34, 0x2a9140).setStrokeStyle(2, 0x1b6b2d).setData("tree", true);
+    // árvores sólidas também
+    for (const x of [160, 780, 1240]) {
+      this.add.circle(x, 300, 34, 0x2a9140).setStrokeStyle(2, 0x1b6b2d);
+      props.add(this.add.rectangle(x, 300, 56, 56, 0x2a9140, 0.001));
+    }
 
     // portas dos prédios (Fase 2+)
     this.add.rectangle(280, 285, 34, 10, 0x1a1c2c).setStrokeStyle(2, 0x8d5524);
@@ -61,7 +67,7 @@ export class CityScene extends BaseDuplaScene {
 
     this.physics.add.collider(
       [this.players.lilly, this.players.kielop] as unknown as Phaser.Types.Physics.Arcade.SpriteWithDynamicBody[],
-      this.physics.add.staticGroup()
+      this.wallsGroup!
     );
   }
 }

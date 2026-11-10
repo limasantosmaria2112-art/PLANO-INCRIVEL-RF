@@ -19,14 +19,15 @@ export interface QuestionDialogueLine {
   text: string;
 }
 
-/** Linhas padrão exibidas quando uma troca de controle acontece */
+/** Linhas padrão exibidas quando uma troca de controle acontece.
+ *  O autor é sempre o personagem que VAI assumir (o follower). */
 export const SWAP_LINES: Record<CharacterId, QuestionDialogueLine[]> = {
   lilly: [
-    { speaker: "lilly", text: "KILOP POR FAVOR ME DEIXA ASSUMIR O COMANDO VAIIII" },
-    { speaker: "kielop", text: "...tá bom, tá bom. Nada de correr em direção ao inimigo." }
+    { speaker: "lilly", text: "sai da frente, cérebro. minha vez de aparecer." },
+    { speaker: "kielop", text: "...toma. só não escolha 'correr pro inimigo' de novo." }
   ],
   kielop: [
-    { speaker: "kielop", text: "Lilly, deixa que eu vou." },
-    { speaker: "lilly", text: "Tá! Mas se tropeçar em ninguém, eu ri." }
+    { speaker: "kielop", text: "assumindo o comando. alguém aqui precisa ler o mapa." },
+    { speaker: "lilly", text: "vai, tático. aceito você à minha frente." }
   ]
 };

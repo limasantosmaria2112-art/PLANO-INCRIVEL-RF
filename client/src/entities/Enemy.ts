@@ -35,7 +35,8 @@ export class Enemy extends Entity {
     x: number,
     y: number,
     def: EnemyDef,
-    goals: { x: number; y: number }[]
+    goals: { x: number; y: number }[],
+    private walls?: Phaser.Physics.Arcade.StaticGroup
   ) {
     super(scene, x, y, def.color);
     this.def = def;
@@ -60,7 +61,7 @@ export class Enemy extends Entity {
     if (Phaser.Math.Distance.Between(this.x, this.y, goal.x, goal.y) < 10) {
       this.gi = (this.gi + 1) % this.goals.length;
     } else {
-      this.moveTowards(goal.x, goal.y);
+      this.moveTowardsObstacles(goal.x, goal.y, this.walls);
     }
   }
 }

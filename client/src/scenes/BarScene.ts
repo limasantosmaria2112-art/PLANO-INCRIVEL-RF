@@ -30,11 +30,12 @@ export class BarScene extends BaseDuplaScene {
       [480, 250, 560, 24], // balcão
       [150, 300, 24, 240],
       [810, 280, 24, 170]
-    ].forEach(([x, y, w, h]) => walls.add(this.add.rectangle(x, y, w, h, 0x241626).setStrokeStyle(2, 0x5b3d2e)));
+    ].forEach(([x, y, w, h]) => walls.add(this.add.rectangle(x, y, w, h, 0x4a1f33).setStrokeStyle(3, 0xc46a2b)));
     this.physics.add.collider(
       [this.players.lilly, this.players.kielop] as unknown as Phaser.Types.Physics.Arcade.SpriteWithDynamicBody[],
       walls
     );
+    this.wallsGroup = walls;
 
     // decoração: mesinhas + luminárias
     this.add.rectangle(420, 430, 90, 50, 0x7a4b2a).setStrokeStyle(2, 0xffca6b);
@@ -59,7 +60,7 @@ export class BarScene extends BaseDuplaScene {
     this.addSwapZone(420, 430, 150, 80);
 
     // porta de saída para a praça
-    this.addDoor(480, 540, 120, 40, "City", { x: 120, y: 700 });
+    this.addDoor(480, 540, 120, 40, "City", { x: 120, y: 640 });
     this.add.rectangle(480, 548, 60, 16, 0x1a1c2c).setStrokeStyle(2, 0x8d5524);
     this.add.text(480, 525, "🚪 sair", { fontSize: "9px", color: "#c9d1f2" }).setOrigin(0.5);
   }
@@ -75,9 +76,9 @@ export class BarScene extends BaseDuplaScene {
         break;
       case 2:
         this.dialogue.start([
-          { speaker: "npc", text: "Vocês... se aproximaram da casa? Sinto o cheiro de dente quente em vocês." },
-          { speaker: "lilly", text: "FIÓ DO CERBERUS FOI MUITO BRABO COM GENTE!!" },
-          { speaker: "kielop", text: "Ela quis dizer: 'poderia dar a bebida agora'." }
+          { speaker: "npc", text: "vocês passaram pela casa? sinto cheiro de dente quente no ar." },
+          { speaker: "lilly", text: "o cachorrinho deu uma aula de física aplicada. na gente." },
+          { speaker: "kielop", text: "ela quis dizer: 'a bebida, evy.'" }
         ]);
         break;
     }
@@ -87,27 +88,28 @@ export class BarScene extends BaseDuplaScene {
 /* ───── Falas do Evy ───── */
 
 const EVY_QUEST_LINES: QuestionDialogueLine[] = [
-  { speaker: "npc", text: "Ah, dupla nova! O quema-cuca de sempre pra vocês?" },
-  { speaker: "lilly", text: "A BEBIDA ESPECIAL! DUAS! VAIIII!" },
-  { speaker: "npc", text: "...aí vem o problema. Não tem. Três trombadinhas levaram A ÚLTIMA garrafa." },
-  { speaker: "kielop", text: "Três crianças... roubando UMA garrafa de bebida rara. Faz sentido." },
-  { speaker: "npc", text: "Elas foram pra casa ao fim da trilha leste. Trazem minha bebida de volta e o round seguinte é por minha conta." },
-  { speaker: "lilly", text: "MISSÃO ACEITA CARAMBA!!" }
+  { speaker: "npc", text: "ah, a dupla nova. o quema-cuca de sempre pra vocês?" },
+  { speaker: "lilly", text: "a bebida especial. duas. somos clientes profissionais, sim." },
+  { speaker: "npc", text: "...então tem problema: acabou. três crianças levaram a última garrafa." },
+  { speaker: "kielop", text: "três crianças. uma garrafa rara. zero testemunhas. admirável." },
+  { speaker: "npc", text: "a casa fica no fim da trilha leste. tragam a bebida e a próxima fica por conta da casa." },
+  { speaker: "lilly", text: "aceito. recompensa líquida e tudo." }
 ];
 
 const EVY_CHATTER: QuestionDialogueLine[][] = [
   [
-    { speaker: "npc", text: "Sabia que raposa com corpo de humano atende o dobramento de clientes? Cauda limpando mesas é economia." },
-    { speaker: "lilly", text: "EU QUERO UMA CAUDA ASSIM!! KILOP DEIXA?" },
-    { speaker: "kielop", text: "...tá bom, tá bom." }
+    { speaker: "npc", text: "raposa com corpo de humano atendendo o dobro de clientes. a cauda limpa as mesas por mim. economia." },
+    { speaker: "lilly", text: "quero uma cauda. kielop, aprova fiscalmente?" },
+    { speaker: "kielop", text: "não é minha área. mas anoto como item de interesse." }
   ],
   [
-    { speaker: "npc", text: "O segredo da drinkaria não é o copo. É o pé. Rapoza bem equipada levanta o copo sozinha." },
-    { speaker: "kielop", text: "Anotado. We'll build a drinkária em nosso apartamento." }
+    { speaker: "npc", text: "o segredo da drinkaria não é o copo. é o pé. rapoza de postura levanta o copo sozinha." },
+    { speaker: "kielop", text: "anotado. abriremos uma drinkária." },
+    { speaker: "lilly", text: "com cauda. não abrimos sem cauda." }
   ],
   [
-    { speaker: "npc", text: "Cuidado na trilha, é. Os bichos de lá nunca perderam uma briga." },
-    { speaker: "lilly", text: "EU TAMBÉM NUNCA PERDI! Impressionante, não?" },
-    { speaker: "kielop", text: "É porque você nunca LUTOU antes." }
+    { speaker: "npc", text: "cuidado na trilha, é. os bichos de lá nunca perderam uma briga." },
+    { speaker: "lilly", text: "nós também não perdemos. nunca brigamos, então empate técnico." },
+    { speaker: "kielop", text: "...não é assim que funciona." }
   ]
 ];
