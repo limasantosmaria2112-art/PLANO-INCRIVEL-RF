@@ -20,4 +20,4 @@ RPG 2D top-down em TypeScript (POO), feito em Phaser 3, com Lilly (metamorfa) e 
 - **Lilly** — metamorfa: assume formas animais (gatinho, slide) para navegar o mundo e resistir a efeitos.
 - **Kielop** — humano normal que **copia habilidades** de inimigos derrotados.
 
-> *"Tudo começou com uma bebida roubada... e um cachorrinho que não devia ter sido revivido."*
+> *"Tudo começou com uma bebida roubada... e um kennedito que não devia ter sido revivido."*

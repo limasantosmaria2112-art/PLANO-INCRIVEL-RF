@@ -5,7 +5,7 @@
 Lilly e Kielop se encontram em um bar e pedem a mesma bebida. O garçom informa que
 não há a bebida porque **3 trombadinhas roubaram** a última. A dupla vai em busca
 da bebida, enfrenta imprevistos no caminho e descobre que os "trombadinhas" são
-**3 crianças** que usaram a bebida num **ritual para reviver um cachorrinho
+**3 crianças** que usaram a bebida num **ritual para reviver um kennedito
 querido** — mas reviveram um **Cerberus**.
 
 Lilly e Kielop derrotam o Cerberus, voltam ao bar e a cena final é a dupla

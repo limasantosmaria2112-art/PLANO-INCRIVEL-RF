@@ -3,7 +3,7 @@ export type QuestStage = 0 | 1 | 2;
 const LABELS: Record<QuestStage, string> = {
   0: "Quest: converse com Evy (barman do bar)",
   1: "Quest: a Bebida — vá pela trilha leste até a casa",
-  2: "Quest: a Bebida — o ritual despertou o cachorro revivido: resolva isso na casa"
+  2: "Quest: a Bebida — o ritual despertou o kennedito revivido: resolva isso na casa"
 };
 
 /**
@@ -31,7 +31,7 @@ export class QuestSystem {
   advance(): void {
     if (this._stage < 2) {
       this._stage++;
-      if (this._stage === 2) this._ritualAtivado = true; // círculo examinado → dog desperta
+      if (this._stage === 2) this._ritualAtivado = true; // círculo examinado → kennedito desperta
     }
   }
 

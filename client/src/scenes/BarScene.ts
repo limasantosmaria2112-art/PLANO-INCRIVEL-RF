@@ -77,7 +77,7 @@ export class BarScene extends BaseDuplaScene {
       case 2:
         this.dialogue.start([
           { speaker: "npc", text: "vocês passaram pela casa? sinto cheiro de dente quente no ar." },
-          { speaker: "lilly", text: "o cachorrinho deu uma aula de física aplicada. na gente." },
+          { speaker: "lilly", text: "o kennedito deu uma aula de física aplicada. na gente." },
           { speaker: "kielop", text: "ela quis dizer: 'a bebida, evy.'" }
         ]);
         break;

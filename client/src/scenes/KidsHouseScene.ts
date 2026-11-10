@@ -7,12 +7,12 @@ import type { QuestionDialogueLine } from "shared";
 /**
  * KidsHouseScene — Ato 3: interior da casa das três crianças.
  * Sem combate contra elas. Ao examinar o círculo com a bebida,
- * o ritual desperta o Cachorrinho Revivido — DENTRO da casa.
+ * o ritual desperta o Kennedito Revivido — DENTRO da casa.
  */
 export class KidsHouseScene extends BaseDuplaScene {
-  private static readonly CACHORRINHO: EnemyDef = {
-    id: "cachorrinho",
-    name: "Cachorrinho Revivido 🐶",
+  private static readonly KENNNEDITO: EnemyDef = {
+    id: "kennedito",
+    name: "Kennedito Revivido 🐶",
     color: 0xd08b3a,
     maxHp: 34,
     power: 8,
@@ -20,7 +20,7 @@ export class KidsHouseScene extends BaseDuplaScene {
       name: "Rosnado Sônico",
       power: 17,
       lines: [
-        { speaker: "kielop", text: "o Rosnado Sônico agora é meu, por direito de vencedor. o cão tinha técnica, admito." },
+        { speaker: "kielop", text: "o Rosnado Sônico agora é meu, por direito de vencedor. o kennedito tinha técnica, admito." },
         { speaker: "lilly", text: "latiu ondas de choque em nós. respeitável, pra um bicho de estimação." }
       ]
     }
@@ -69,7 +69,7 @@ export class KidsHouseScene extends BaseDuplaScene {
     const c = this.add.circle(620, 340, 5, 0xffd75e);
     this.tweens.add({ targets: c, alpha: 0.2, duration: 400, yoyo: true, repeat: -1 });
 
-    // ritual já feito? o cachorro continua aqui, patrulhando o quarto
+    // ritual já feito? o kennedito continua aqui, patrulhando o quarto
     if (quest.ritualAtivado) this.spawnDog();
   }
 
@@ -78,16 +78,16 @@ export class KidsHouseScene extends BaseDuplaScene {
       this.dialogue.start(RITUAL_DONE_LINES);
       return;
     }
-    // o diálogo termina → o ritual desperta o cachorro NA SALA
+    // o diálogo termina → o ritual desperta o kennedito NA SALA
     this.dialogue.start(RITUAL_LINES, () => {
-      quest.advance(); // stage 1 → 2 (ativada ritual e o cachorro)
+      quest.advance(); // stage 1 → 2 (ativada ritual e o kennedito)
       this.spawnDog();
     });
   }
 
-  /** O Cachorrinho Revivido surge dentro da casa, ao lado do círculo */
+  /** O Kennedito Revivido surge dentro da casa, ao lado do círculo */
   private spawnDog(): void {
-    this.addEnemy(800, 260, KidsHouseScene.CACHORRINHO, [{ x: 780, y: 280 }, { x: 620, y: 360 }]);
+    this.addEnemy(800, 260, KidsHouseScene.KENNNEDITO, [{ x: 780, y: 280 }, { x: 620, y: 360 }]);
   }
 }
 
