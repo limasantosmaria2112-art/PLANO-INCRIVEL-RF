@@ -9,6 +9,7 @@ import { BattleSystem } from "../systems/BattleSystem";
 import { dupla } from "../systems/DuplaSingleton";
 import { copiasKielop } from "../systems/CopySystem";
 import { quest } from "../systems/QuestSystem";
+import { gameState } from "../core/GameConfig";
 
 interface Zone {
   rect: Phaser.GameObjects.Rectangle;
@@ -73,10 +74,23 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
     };
     this.input.keyboard!.on("keydown-E", () => this.tryInteract());
 
+    // ESC → menu de pausa (overlay). Não abre durante diálogo ou batalha.
+    this.input.keyboard!.on("keydown-ESCAPE", () => this.openPause());
+
+    // CONTINUAR (menu inicial): lembra o último mundo jogado nesta sessão
+    gameState.ultimaCena = this.scene.key;
+
     this.hud = this.add
       .text(12, 10, "", { fontSize: "13px", color: "#ffffff", backgroundColor: "#00000077", padding: { x: 6, y: 4 } })
       .setDepth(900)
       .setScrollFactor(0);
+  }
+
+  /** Abre o overlay de pausa por cima desta cena (ela fica pausada) */
+  private openPause(): void {
+    if (this.battle?.isOpen() || this.dialogue?.isOpen()) return;
+    this.scene.launch("Pause", { from: this.scene.key });
+    this.scene.pause();
   }
 
   /** Registra uma área interativa invisível (NPC, porta, objeto...) */
@@ -117,17 +131,23 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
   }
 
   /** Inimigo que patrulha entre goals; encostar dispara a batalha */
-  protected addEnemy(x: number, y: number, def: EnemyDef, goals: { x: number; y: number }[]): void {
+  protected addEnemy(
+    x: number,
+    y: number,
+    def: EnemyDef,
+    goals: { x: number; y: number }[],
+    opts?: { onWin?: () => void }
+  ): void {
     const enemy = new Enemy(this, x, y, def, goals, this.wallsGroup);
     this.enemies.push(enemy);
     this.physics.add.overlap(
       [this.players.lilly, this.players.kielop] as unknown as Phaser.Physics.Arcade.Sprite[],
       enemy,
-      () => this.encounter(enemy)
+      () => this.encounter(enemy, opts?.onWin)
     );
   }
 
-  private encounter(enemy: Enemy): void {
+  private encounter(enemy: Enemy, extraOnWin?: () => void): void {
     // ignora inimigos mortos/destruídos (overlap pendente do arcade após a vitória)
     if (!enemy.active || enemy.hp <= 0) return;
     if (this.battle.isOpen() || this.dialogue.isOpen()) return;
@@ -137,8 +157,9 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
         this.enemies = this.enemies.filter((e) => e !== enemy);
         enemy.destroy();
         if (copyLines.length > 0) this.dialogue.start(copyLines);
+        extraOnWin?.();
       },
-      onLose: () => this.scene.restart(this.lastSpawn),
+      onLose: () => this.scene.start("GameOver", { cena: this.scene.key, spawn: this.lastSpawn }),
       onFlee: () => {
         this.dialogue.start([
           { speaker: "lilly", text: "recuo tático. zero dano. vou emoldurar essa manhã." },

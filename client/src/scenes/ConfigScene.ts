@@ -4,12 +4,17 @@ import Phaser from "phaser";
  * ConfigScene — menu de configurações (volume, fullscreen, etc.)
  */
 export class ConfigScene extends Phaser.Scene {
+  /** cena de jogo para retomar quando aberta pelo menu de pausa */
+  private returnTo: string | null = null;
+
   constructor() {
     super("Config");
   }
 
-  create(): void {
+  create(data?: { returnTo?: string }): void {
     const { width, height } = this.scale;
+    // volta para o jogo (chamada pelo Pause) em vez do menu
+    this.returnTo = data?.returnTo ?? null;
 
     // Fundo semitransparente
     this.add.rectangle(width / 2, height / 2, width, height, 0x14162b);
@@ -146,10 +151,11 @@ export class ConfigScene extends Phaser.Scene {
       );
       fullscreenText.setColor(this.sys.game.globals.fullscreen ? "#FFD700" : "#AAAAAA");
 
+      const scale = this.scale as Phaser.Scale.ScaleManager & { fullscreenManager: { start(): void; stop(): void } };
       if (this.sys.game.globals.fullscreen) {
-        this.scale.fullscreenManager.start();
+        scale.fullscreenManager.start();
       } else {
-        this.scale.fullscreenManager.stop();
+        scale.fullscreenManager.stop();
       }
     });
 
@@ -159,7 +165,7 @@ export class ConfigScene extends Phaser.Scene {
       this.sys.game.globals.volumeBgm = 70;
       this.sys.game.globals.volumeSfx = 80;
       this.sys.game.globals.fullscreen = false;
-      this.scene.restart();
+      this.scene.restart({ returnTo: this.returnTo });
     }, 200);
   }
 
@@ -185,6 +191,12 @@ export class ConfigScene extends Phaser.Scene {
   }
 
   private goBack(): void {
+    if (this.returnTo) {
+      // veio do menu de pausa: retoma o mundo pausado (sem recomeçar)
+      this.scene.resume(this.returnTo);
+      this.scene.stop();
+      return;
+    }
     this.scene.start("Menu");
   }
 }

@@ -1,9 +1,10 @@
-export type QuestStage = 0 | 1 | 2;
+export type QuestStage = 0 | 1 | 2 | 3;
 
 const LABELS: Record<QuestStage, string> = {
   0: "Quest: converse com Evy (barman do bar)",
   1: "Quest: a Bebida — vá pela trilha leste até a casa",
-  2: "Quest: a Bebida — o ritual despertou o kennedito revivido: resolva isso na casa"
+  2: "Quest: a Bebida — o ritual despertou o kennedito revivido: resolva isso na casa",
+  3: "Quest: a Bebida — concluída ✅"
 };
 
 /**
@@ -15,6 +16,7 @@ const LABELS: Record<QuestStage, string> = {
 export class QuestSystem {
   private _stage: QuestStage = 0;
   private _ritualAtivado = false;
+  private _kenneditoResolvido = false;
 
   get stage(): QuestStage {
     return this._stage;
@@ -22,6 +24,11 @@ export class QuestSystem {
 
   get ritualAtivado(): boolean {
     return this._ritualAtivado;
+  }
+
+  /** o Kennedito Revivido foi derrotado (libera o final com o Evy) */
+  get kenneditoResolvido(): boolean {
+    return this._kenneditoResolvido;
   }
 
   get label(): string {
@@ -35,9 +42,19 @@ export class QuestSystem {
     }
   }
 
+  /** estágio final: conta pro Evy no bar → encerra o prólogo */
+  finalizar(): void {
+    this._stage = 3;
+  }
+
+  marcarKenneditoResolvido(): void {
+    this._kenneditoResolvido = true;
+  }
+
   reset(): void {
     this._stage = 0;
     this._ritualAtivado = false;
+    this._kenneditoResolvido = false;
   }
 }
 

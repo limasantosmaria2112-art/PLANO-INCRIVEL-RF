@@ -87,7 +87,10 @@ export class KidsHouseScene extends BaseDuplaScene {
 
   /** O Kennedito Revivido surge dentro da casa, ao lado do círculo */
   private spawnDog(): void {
-    this.addEnemy(800, 260, KidsHouseScene.KENNNEDITO, [{ x: 780, y: 280 }, { x: 620, y: 360 }]);
+    this.addEnemy(800, 260, KidsHouseScene.KENNNEDITO, [{ x: 780, y: 280 }, { x: 620, y: 360 }], {
+      // derrotado → libera o final do prólogo no diálogo do Evy
+      onWin: () => quest.marcarKenneditoResolvido()
+    });
   }
 }
 

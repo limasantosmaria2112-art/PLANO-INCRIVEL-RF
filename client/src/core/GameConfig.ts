@@ -7,9 +7,21 @@ import { BarScene } from "../scenes/BarScene";
 import { CityScene } from "../scenes/CityScene";
 import { TrailScene } from "../scenes/TrailScene";
 import { KidsHouseScene } from "../scenes/KidsHouseScene";
+import { PauseMenuScene } from "../scenes/PauseMenuScene";
+import { GameOverScene } from "../scenes/GameOverScene";
+import { EndingScene } from "../scenes/EndingScene";
 
 export const GAME_WIDTH = 960;
 export const GAME_HEIGHT = 540;
+
+/**
+ * Estado de sessão (sem save em banco ainda — Fase 3).
+ * `ultimaCena` alimenta o botão CONTINUAR do menu: reabrir o último
+ * mundo jogado nesta sessão. Quando o SaveSystem existir, este é o ponto de encaixe.
+ */
+export const gameState = {
+  ultimaCena: null as string | null
+};
 
 export function createGame(parent: HTMLElement): Phaser.Game {
   const game = new Phaser.Game({
@@ -23,7 +35,7 @@ export function createGame(parent: HTMLElement): Phaser.Game {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [BootScene, MenuScene, ConfigScene, BarScene, CityScene, TrailScene, KidsHouseScene],
+    scene: [BootScene, MenuScene, ConfigScene, BarScene, CityScene, TrailScene, KidsHouseScene, PauseMenuScene, GameOverScene, EndingScene],
     physics: {
       default: "arcade",
       arcade: { debug: false }

@@ -75,11 +75,15 @@ export class BarScene extends BaseDuplaScene {
         this.dialogue.start(EVY_CHATTER[this.evyChatterIndex++ % EVY_CHATTER.length]);
         break;
       case 2:
-        this.dialogue.start([
-          { speaker: "npc", text: "vocês passaram pela casa? sinto cheiro de dente quente no ar." },
-          { speaker: "lilly", text: "o kennedito deu uma aula de física aplicada. na gente." },
-          { speaker: "kielop", text: "ela quis dizer: 'a bebida, evy.'" }
-        ]);
+        if (quest.kenneditoResolvido) {
+          // kennedito resolvido → a Bebida está em jogo: final do prólogo!
+          this.dialogue.start(EVY_FINALE_LINES, () => {
+            quest.finalizar(); // stage 3 (HUD mostra "concluída ✅")
+            this.scene.start("Ending");
+          });
+        } else {
+          this.dialogue.start(EVY_WAIT_LINES);
+        }
         break;
     }
   }
@@ -94,6 +98,23 @@ const EVY_QUEST_LINES: QuestionDialogueLine[] = [
   { speaker: "kielop", text: "três crianças. uma garrafa rara. zero testemunhas. admirável." },
   { speaker: "npc", text: "a casa fica no fim da trilha leste. tragam a bebida e a próxima fica por conta da casa." },
   { speaker: "lilly", text: "aceito. recompensa líquida e tudo." }
+];
+
+/** Espera do Evy: ainda falta resolver o kennedito na casa */
+const EVY_WAIT_LINES: QuestionDialogueLine[] = [
+  { speaker: "npc", text: "vocês passaram pela casa? sinto cheiro de dente quente no ar." },
+  { speaker: "lilly", text: "o kennedito deu uma aula de física aplicada. na gente." },
+  { speaker: "kielop", text: "ela quis dizer: 'a bebida, evy.'" }
+];
+
+/** Final do prólogo: a dupla volta com a história completa */
+const EVY_FINALE_LINES: QuestionDialogueLine[] = [
+  { speaker: "npc", text: "vocês voltaram inteiros E com a garrafa. que cliente exemplar. suspeito." },
+  { speaker: "lilly", text: "houve necromancia recreativa. e um cachorro com opinião forte sobre ração." },
+  { speaker: "kielop", text: "resolvido no pedido de desculpas oficial das três crianças. ficou registrado." },
+  { speaker: "npc", text: "então tá. a bebida é por conta da casa. e da história, claro." },
+  { speaker: "lilly", text: "proposto. brindo ao kennedito, que nos ensinou física aplicada." },
+  { speaker: "kielop", text: "e ao bar do evy. onde o prólogo termina sempre com bebida e burocracia." }
 ];
 
 const EVY_CHATTER: QuestionDialogueLine[][] = [
