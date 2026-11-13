@@ -69,23 +69,15 @@ export class MenuScene extends Phaser.Scene {
     this.makePortrait(200, 320, 0xFF69B4, "LILLY", "Mario", 0);
     this.makePortrait(300, 360, 0x5BC8FF, "KIEL", "Lilly", 250);
 
-<<<<<<< HEAD
     // Botões (CONTINUAR só aparece se já houve mundo jogado nesta sessão)
     const continuarDisponivel = gameState.ultimaCena !== null;
-    this.makeButton(width / 2, 460, "COMEÇAR", 0x2a2f4a, 0xFFD700, this.gotoBar.bind(this));
-    if (continuarDisponivel) {
-      this.makeButton(width / 2, 520, "CONTINUAR", 0x2a2f4a, 0x9de8a5, this.gotoContinue.bind(this));
-      this.makeButton(width / 2, 580, "CONFIGURAÇÕES", 0x2a2f4a, 0x4ECDC4, this.gotoConfig.bind(this));
-    } else {
-      this.makeButton(width / 2, 540, "CONFIGURAÇÕES", 0x2a2f4a, 0x4ECDC4, this.gotoConfig.bind(this));
-    }
-=======
-    // Botão COMEÇAR
     this.makeButton(width / 2, 460, "COMEÇAR", 0x12222e, 0x4ECDC4, this.gotoBar.bind(this));
-
-    // Botão CONFIGURAÇÕES
-    this.makeButton(width / 2, 540, "CONFIGURAÇÕES", 0x12222e, 0x7fd8e8, this.gotoConfig.bind(this));
->>>>>>> 8c6e4d9e289f70674c9df64b7436cc9c1d4bac0f
+    if (continuarDisponivel) {
+      this.makeButton(width / 2, 520, "CONTINUAR", 0x12222e, 0x9de8a5, this.gotoContinue.bind(this));
+      this.makeButton(width / 2, 580, "CONFIGURAÇÕES", 0x12222e, 0x7fd8e8, this.gotoConfig.bind(this));
+    } else {
+      this.makeButton(width / 2, 540, "CONFIGURAÇÕES", 0x12222e, 0x7fd8e8, this.gotoConfig.bind(this));
+    }
 
     // Controles de teclado
     this.add

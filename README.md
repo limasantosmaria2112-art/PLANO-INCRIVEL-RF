@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # RuPtuRa-FononiCa (2026)
-=======
-# RUPTURA-FONONICA (2026)
->>>>>>> 9f3f0db3c659ece246cf822dca04ca82b4e9a6dd
 
 RPG 2D top-down em TypeScript (POO), feito em Phaser 3, com Lilly (metamorfa) e Kielop (copia habilidades) andando em dupla.
 
