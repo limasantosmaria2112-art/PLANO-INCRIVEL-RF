@@ -21,3 +21,6 @@ RPG 2D top-down em TypeScript (POO), feito em Phaser 3, com Lilly (metamorfa) e 
 - **Kielop** — humano normal que **copia habilidades** de inimigos derrotados.
 
 > *"Tudo começou com uma bebida roubada... e um kennedito que não devia ter sido revivido."*
+
+[text](../../../Downloads/Lilly_sprites.zip)
+[text](../../../Downloads/Kielop_sprites.zip)

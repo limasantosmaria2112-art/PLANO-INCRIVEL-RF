@@ -14,8 +14,8 @@ export abstract class Player extends Entity {
   hp: number;
   maxHp = 40;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, color: number, id: CharacterId, label: string) {
-    super(scene, x, y, color);
+  constructor(scene: Phaser.Scene, x: number, y: number, color: number, id: CharacterId, label: string, spriteKey?: string) {
+    super(scene, x, y, color, spriteKey);
     this.id = id;
     this.label = label;
     this.hp = this.maxHp;

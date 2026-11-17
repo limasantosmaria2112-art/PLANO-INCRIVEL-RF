@@ -5,14 +5,27 @@ import Phaser from "phaser";
  * jogadores, NPCs, inimigos e itens.
  */
 export abstract class Entity extends Phaser.GameObjects.Container {
-  protected sprite: Phaser.GameObjects.Rectangle;
+  protected sprite: Phaser.GameObjects.Rectangle | Phaser.GameObjects.Sprite;
+  /** key da spritesheet quando a entidade tem arte; null = fallback quadrado */
+  protected spriteKey: string | null = null;
+  /** direcao olhada agora (nomes batem com as animacoes do BootScene) */
+  protected facing: "frente" | "tras" | "esquerda" | "direita" = "frente";
   protected speed = 140;
   /** último desvio usado — evita trocar de ângulo a cada frame (senão o bicho "gira") */
   private lastOffsetIndex = 0;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, color: number) {
+  constructor(scene: Phaser.Scene, x: number, y: number, color: number, spriteKey?: string, displayHeight = 42) {
     super(scene, x, y);
-    this.sprite = scene.add.rectangle(0, 0, 24, 24, color);
+    if (spriteKey && scene.textures.exists(spriteKey)) {
+      // arte real do personagem, alinhada pelos pes na base do corpo fisico
+      const frame = scene.textures.getFrame(spriteKey, 0);
+      const sp = scene.add.sprite(0, 14, spriteKey, 0);
+      sp.setOrigin(0.5, 1).setScale(displayHeight / frame.height);
+      this.sprite = sp;
+      this.spriteKey = spriteKey;
+    } else {
+      this.sprite = scene.add.rectangle(0, 0, 24, 24, color);
+    }
     this.add(this.sprite);
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -82,5 +95,21 @@ export abstract class Entity extends Phaser.GameObjects.Container {
 
   stop(): void {
     this.arcadeBody.stop();
+  }
+
+  /**
+   * Anima o sprite conforme a velocidade do corpo fisico (andar/parar
+   * e a direcao do movimento). Nao faz nada no fallback de quadrado.
+   */
+  updateAnimation(): void {
+    if (!this.spriteKey || !(this.sprite instanceof Phaser.GameObjects.Sprite)) return;
+    const v = this.arcadeBody.velocity;
+    const andando = Math.hypot(v.x, v.y) > 5;
+    if (andando) {
+      if (Math.abs(v.x) >= Math.abs(v.y)) this.facing = v.x > 0 ? "direita" : "esquerda";
+      else this.facing = v.y > 0 ? "frente" : "tras";
+    }
+    const key = `${this.spriteKey}-${andando ? "walk" : "idle"}-${this.facing}`;
+    if (this.sprite.anims.currentAnim?.key !== key) this.sprite.play(key, true);
   }
 }
