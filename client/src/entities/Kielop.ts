@@ -7,6 +7,6 @@ import type { CharacterId } from "shared";
  */
 export class Kielop extends Player {
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, 0x5bc8ff, "kielop" as CharacterId, "Kielop");
+    super(scene, x, y, 0x5bc8ff, "kielop" as CharacterId, "Kielop", "kielop");
   }
 }

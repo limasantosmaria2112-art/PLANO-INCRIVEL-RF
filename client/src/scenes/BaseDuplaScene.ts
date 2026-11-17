@@ -195,6 +195,8 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
     this.enemies.forEach((e) => e.update());
     const active = this.players[dupla.active];
     const follower = this.players[dupla.follower];
+    active.updateAnimation();
+    follower.updateAnimation();
 
     if (!this.dialogue.isOpen()) {
       active.handleInput(this.cursors, this.wasd);

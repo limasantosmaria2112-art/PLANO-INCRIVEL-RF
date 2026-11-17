@@ -9,7 +9,36 @@ export class BootScene extends Phaser.Scene {
     super("Boot");
   }
 
+  /** atlas da dupla: [parado, andar1, andar2] x [frente, tras, esquerda, direita] */
+  private static readonly DIRECOES = ["frente", "tras", "esquerda", "direita"] as const;
+
+  preload(): void {
+    this.load.spritesheet("lilly", "img/sprites/lilly.png", { frameWidth: 272, frameHeight: 392 });
+    this.load.spritesheet("kielop", "img/sprites/kielop.png", { frameWidth: 192, frameHeight: 264 });
+  }
+
   create(): void {
+    // animacoes idle + walk nas 4 direcoes (frame = linha*3 + coluna)
+    for (const id of ["lilly", "kielop"] as const) {
+      BootScene.DIRECOES.forEach((dir, linha) => {
+        this.anims.create({
+          key: `${id}-idle-${dir}`,
+          frames: [{ key: id, frame: linha * 3 }],
+          frameRate: 1,
+          repeat: -1
+        });
+        this.anims.create({
+          key: `${id}-walk-${dir}`,
+          frames: [
+            { key: id, frame: linha * 3 + 1 },
+            { key: id, frame: linha * 3 + 2 }
+          ],
+          frameRate: 6,
+          repeat: -1
+        });
+      });
+    }
+
     const { width, height } = this.scale;
 
     // Fundo escuro simples

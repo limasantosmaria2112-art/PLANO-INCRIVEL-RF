@@ -8,6 +8,6 @@ import type { CharacterId } from "shared";
  */
 export class Lilly extends Player {
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y, 0xff77a9, "lilly" as CharacterId, "Lilly");
+    super(scene, x, y, 0xff77a9, "lilly" as CharacterId, "Lilly", "lilly");
   }
 }
