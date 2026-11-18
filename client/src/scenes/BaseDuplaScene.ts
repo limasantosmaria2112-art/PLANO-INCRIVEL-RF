@@ -32,6 +32,7 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
   protected wasd!: WASDKeys;
   protected hud!: Phaser.GameObjects.Text;
   protected zones: Zone[] = [];
+  protected floorSprite?: Phaser.GameObjects.TileSprite;
   /** Grupo de paredes da cena, usado pelo steering de follower/inimigos */
   protected wallsGroup?: Phaser.Physics.Arcade.StaticGroup;
 
@@ -48,7 +49,8 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
     spawn?: { x: number; y: number };
   }): void {
     const { width, height } = opts;
-    this.add.rectangle(width / 2, height / 2, width, height, opts.floorColor ?? 0x2d3149);
+    // Usar tileSprite com textura do chão em vez de retângulo colorido
+    this.floorSprite = this.add.tileSprite(width / 2, height / 2, width, height, "floorTexture", 0);
 
     const spawn = opts.spawn ?? { x: width / 2, y: height / 2 };
     this.lastSpawn = spawn;
@@ -64,6 +66,33 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
     if (dupla.active !== "lilly") this.cameras.main.startFollow(this.players[dupla.active], true, 0.12, 0.12);
 
     this.dialogue = new DialogueSystem(this);
+
+    this.setFloorTexture(opts.floorColor ?? 0x2d3149);
+  }
+
+  /** Troca a textura do chão, caso necessário */
+  protected setFloorTexture(textureKey: string): void {
+    if (textureKey === "none") {
+      if (this.floorSprite) this.floorSprite.destroy();
+      return;
+    }
+
+    if (!this.floorSprite) {
+      this.floorSprite = this.add.tileSprite(this.cameras.main.midPoint.x, 0, this.cameras.main.width, this.cameras.main.height, textureKey);
+    } else {
+      this.floorSprite.setTexture(textureKey);
+      this.floorSprite.setSize(this.cameras.main.width, this.cameras.main.height);
+      this.floorSprite.setPosition(this.cameras.main.midPoint.x, this.floorSprite.y);
+    }
+  }
+
+  /**
+   * Retorna true se o chão deveria ter textura de grama (praça/trilha)
+   * Deve ser sobrescrito pelas cenas que usam grama
+   */
+  protected shouldUseGrassTexture(): boolean {
+    return false;
+  }
 
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.wasd = {

@@ -38,6 +38,8 @@ export class TrailScene extends BaseDuplaScene {
       floorColor: 0x1f2a1c,
       spawn: { x: data?.x ?? 150, y: data?.y ?? 450 }
     });
+    // usar grama na trilha
+    this.setFloorTexture("grassTexture");
 
     const walls = this.physics.add.staticGroup();
     // paredes curvadas formando a trilha

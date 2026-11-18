@@ -15,6 +15,8 @@ export class BootScene extends Phaser.Scene {
   preload(): void {
     this.load.spritesheet("lilly", "img/sprites/lilly.png", { frameWidth: 272, frameHeight: 392 });
     this.load.spritesheet("kielop", "img/sprites/kielop.png", { frameWidth: 192, frameHeight: 264 });
+    this.load.image("floorTexture", "img/floor_small.png");
+    this.load.image("grassTexture", "img/grass_small.png");
   }
 
   create(): void {

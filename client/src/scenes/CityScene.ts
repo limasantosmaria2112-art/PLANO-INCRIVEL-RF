@@ -22,6 +22,8 @@ export class CityScene extends BaseDuplaScene {
       floorColor: 0x2d3149,
       spawn: { x: data?.x ?? 480, y: data?.y ?? 620 }
     });
+    // usar grama na praça
+    this.setFloorTexture("grassTexture");
 
     // prédios DECORATIVOS que agora são sólidos (nada de colisão fantasma)
     const props = (this.wallsGroup ??= this.physics.add.staticGroup());
