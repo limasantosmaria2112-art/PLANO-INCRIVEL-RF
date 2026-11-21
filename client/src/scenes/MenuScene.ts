@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { gameState } from "../core/GameConfig";
+import { novaJornada } from "../systems/NovaJornada";
 
 /**
  * MenuScene — tela de início. Fundo do bar em tons frios (azul-noite, petróleo, teal),
@@ -220,6 +221,8 @@ export class MenuScene extends Phaser.Scene {
   }
 
   private gotoBar(): void {
+    // COMEÇAR = jornada do zero (sem isso, quest/cópias do replay anterior vazariam)
+    novaJornada();
     this.scene.start("Bar");
   }
 

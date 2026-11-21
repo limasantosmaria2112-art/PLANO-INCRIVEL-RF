@@ -36,7 +36,7 @@ export class KidsHouseScene extends BaseDuplaScene {
 
   create(data?: { x?: number; y?: number }): void {
     const spawn = { x: data?.x ?? 480, y: data?.y ?? 460 };
-    this.setupScene({ width: 960, height: 560, floorColor: 0x4a3a2e, spawn });
+    this.setupScene({ width: 960, height: 560, floorTexture: "floorTexture", spawn });
 
     const walls = this.physics.add.staticGroup();
     [[480, 20, 960, 40], [30, 280, 60, 500], [930, 280, 60, 500], [480, 60, 500, 20]].forEach(([x, y, w, h]) =>
@@ -63,14 +63,15 @@ export class KidsHouseScene extends BaseDuplaScene {
     // porta do fundo até a trilha
     this.add.rectangle(480, 548, 70, 16, 0x1a1c2c).setStrokeStyle(2, 0x8d5524);
     this.add.text(480, 525, "🚪 pátio", { fontSize: "9px", color: "#c9d1f2" }).setOrigin(0.5);
-    this.addDoor(480, 540, 110, 40, "Trail", { x: 1650, y: 450 });
+    this.addDoor(480, 540, 110, 40, "Trail", { x: 1580, y: 430 });
 
     // vela piscando
     const c = this.add.circle(620, 340, 5, 0xffd75e);
     this.tweens.add({ targets: c, alpha: 0.2, duration: 400, yoyo: true, repeat: -1 });
 
     // ritual já feito? o kennedito continua aqui, patrulhando o quarto
-    if (quest.ritualAtivado) this.spawnDog();
+    // (depois de derrotado, não revive: a casa volta a ser só a casa)
+    if (quest.ritualAtivado && !quest.kenneditoResolvido) this.spawnDog();
   }
 
   private examineRitual(): void {
@@ -89,10 +90,19 @@ export class KidsHouseScene extends BaseDuplaScene {
   private spawnDog(): void {
     this.addEnemy(800, 260, KidsHouseScene.KENNNEDITO, [{ x: 780, y: 280 }, { x: 620, y: 360 }], {
       // derrotado → libera o final do prólogo no diálogo do Evy
-      onWin: () => quest.marcarKenneditoResolvido()
+      onWin: () => quest.marcarKenneditoResolvido(),
+      // falas garantidas depois da vitória, com qualquer personagem no controle
+      winLines: KENNEDITO_DERROTADO_LINES
     });
   }
 }
+
+const KENNEDITO_DERROTADO_LINES: QuestionDialogueLine[] = [
+  { speaker: "lilly", text: "acabou. e o cachorro voltou a ser cachorro." },
+  { speaker: "kielop", text: "a ração está a salvo. missão cumprida em termos muito específicos." },
+  { speaker: "lilly", text: "agora: bar. a bebida não vai se beber sozinha." },
+  { speaker: "kielop", text: "o Evy precisa saber que o problema era necromancia infantil. ele vai amar a papelada." }
+];
 
 const RITUAL_LINES: QuestionDialogueLine[] = [
   { speaker: "lilly", text: "círculo rosa gigante no meio da sala. sutileza nível maquete." },

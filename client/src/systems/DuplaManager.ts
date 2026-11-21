@@ -38,4 +38,10 @@ export class DuplaManager {
   onChange(cb: Listener): void {
     this.listeners.push(cb);
   }
+
+  /** Remove um listener (cena encerrada) — evita callback com câmera destruída */
+  offChange(cb: Listener): void {
+    const i = this.listeners.indexOf(cb);
+    if (i >= 0) this.listeners.splice(i, 1);
+  }
 }

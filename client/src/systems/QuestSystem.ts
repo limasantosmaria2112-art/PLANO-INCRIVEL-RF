@@ -1,11 +1,14 @@
 export type QuestStage = 0 | 1 | 2 | 3;
 
 const LABELS: Record<QuestStage, string> = {
-  0: "Quest: converse com Evy (barman do bar)",
-  1: "Quest: a Bebida — vá pela trilha leste até a casa",
-  2: "Quest: a Bebida — o ritual despertou o kennedito revivido: resolva isso na casa",
+  0: "Quest: converse com Evy, o barman 🦊",
+  1: "Quest: a Bebida — siga pela trilha leste até a casa das crianças",
+  2: "Quest: a Bebida — o ritual acordou o Kennedito Revivido. Resolva isso na casa",
   3: "Quest: a Bebida — concluída ✅"
 };
+
+/** stage 2 com a batalha vencida: hora de voltar ao bar */
+const LABEL_POS_BATALHA = "Quest: a Bebida — a batalha acabou. Volte ao bar e conte tudo ao Evy 🦊";
 
 /**
  * QuestSystem — por ora o prólogo tem uma quest guiada sequencial.
@@ -32,6 +35,7 @@ export class QuestSystem {
   }
 
   get label(): string {
+    if (this._stage === 2 && this._kenneditoResolvido) return LABEL_POS_BATALHA;
     return LABELS[this._stage];
   }
 

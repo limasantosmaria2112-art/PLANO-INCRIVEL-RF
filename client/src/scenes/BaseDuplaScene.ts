@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import type { CharacterId } from "shared";
+import type { CharacterId, QuestionDialogueLine } from "shared";
 import { Lilly } from "../entities/Lilly";
 import { Kielop } from "../entities/Kielop";
 import { Player, type WASDKeys } from "../entities/Player";
@@ -45,16 +45,21 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
   protected setupScene(opts: {
     width: number;
     height: number;
-    floorColor?: number;
+    floorTexture?: string;
     spawn?: { x: number; y: number };
   }): void {
     const { width, height } = opts;
-    // Usar tileSprite com textura do chão em vez de retângulo colorido
-    this.floorSprite = this.add.tileSprite(width / 2, height / 2, width, height, "floorTexture", 0);
+    // TileSprite cobrindo o mapa INTEIRO (width x height), atrás de tudo.
+    // Precisa nascer do tamanho do mundo: redimensioná-lo depois para o
+    // tamanho da câmera faz o chão cobrir só um pedaço do cenário.
+    this.floorSprite = this.add
+      .tileSprite(width / 2, height / 2, width, height, opts.floorTexture ?? "floorTexture")
+      .setDepth(-1000);
 
     const spawn = opts.spawn ?? { x: width / 2, y: height / 2 };
     this.lastSpawn = spawn;
     this.enemies = [];
+    this.zones = [];
     this.trail = [];
     this.players = { lilly: new Lilly(this, spawn.x, spawn.y), kielop: new Kielop(this, spawn.x + 46, spawn.y) };
     this.battle = new BattleSystem(this, this.players);
@@ -62,37 +67,18 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
     this.physics.world.setBounds(0, 0, width, height);
     this.cameras.main.setBounds(0, 0, width, height);
     this.cameras.main.startFollow(this.players[dupla.active], true, 0.12, 0.12);
-    dupla.onChange((active) => this.cameras.main.startFollow(this.players[active], true, 0.12, 0.12));
+    // troca de controle → câmera segue quem assumiu. O listener PRECISA ser
+    // removido no shutdown: cena encerrada tem `cameras.main = undefined`,
+    // e um callback antigo estouraria no próximo SwapZone.
+    const seguirAtivo = (active: CharacterId) => {
+      if (!this.cameras?.main) return;
+      this.cameras.main.startFollow(this.players[active], true, 0.12, 0.12);
+    };
+    dupla.onChange(seguirAtivo);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => dupla.offChange(seguirAtivo));
     if (dupla.active !== "lilly") this.cameras.main.startFollow(this.players[dupla.active], true, 0.12, 0.12);
 
     this.dialogue = new DialogueSystem(this);
-
-    this.setFloorTexture(opts.floorColor ?? 0x2d3149);
-  }
-
-  /** Troca a textura do chão, caso necessário */
-  protected setFloorTexture(textureKey: string): void {
-    if (textureKey === "none") {
-      if (this.floorSprite) this.floorSprite.destroy();
-      return;
-    }
-
-    if (!this.floorSprite) {
-      this.floorSprite = this.add.tileSprite(this.cameras.main.midPoint.x, 0, this.cameras.main.width, this.cameras.main.height, textureKey);
-    } else {
-      this.floorSprite.setTexture(textureKey);
-      this.floorSprite.setSize(this.cameras.main.width, this.cameras.main.height);
-      this.floorSprite.setPosition(this.cameras.main.midPoint.x, this.floorSprite.y);
-    }
-  }
-
-  /**
-   * Retorna true se o chão deveria ter textura de grama (praça/trilha)
-   * Deve ser sobrescrito pelas cenas que usam grama
-   */
-  protected shouldUseGrassTexture(): boolean {
-    return false;
-  }
 
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.wasd = {
@@ -113,6 +99,30 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
       .text(12, 10, "", { fontSize: "13px", color: "#ffffff", backgroundColor: "#00000077", padding: { x: 6, y: 4 } })
       .setDepth(900)
       .setScrollFactor(0);
+  }
+
+  /**
+   * Troca a textura do chão mantendo o tileSprite do tamanho do mundo.
+   * Nunca redimensionar/reposicionar aqui: isso faria o chão cobrir só
+   * um pedaço do mapa (bug da grama aparecendo em uma área só).
+   */
+  protected setFloorTexture(textureKey: string, tileScale = 1): void {
+    if (textureKey === "none") {
+      this.floorSprite?.destroy();
+      this.floorSprite = undefined;
+      return;
+    }
+    if (!this.floorSprite) return;
+    this.floorSprite.setTexture(textureKey);
+    this.floorSprite.setTileScale(tileScale, tileScale);
+  }
+
+  /**
+   * Retorna true se o chão deveria ter textura de grama (praça/trilha)
+   * Deve ser sobrescrito pelas cenas que usam grama
+   */
+  protected shouldUseGrassTexture(): boolean {
+    return false;
   }
 
   /** Abre o overlay de pausa por cima desta cena (ela fica pausada) */
@@ -165,18 +175,18 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
     y: number,
     def: EnemyDef,
     goals: { x: number; y: number }[],
-    opts?: { onWin?: () => void }
+    opts?: { onWin?: () => void; winLines?: QuestionDialogueLine[] }
   ): void {
     const enemy = new Enemy(this, x, y, def, goals, this.wallsGroup);
     this.enemies.push(enemy);
     this.physics.add.overlap(
       [this.players.lilly, this.players.kielop] as unknown as Phaser.Physics.Arcade.Sprite[],
       enemy,
-      () => this.encounter(enemy, opts?.onWin)
+      () => this.encounter(enemy, opts?.onWin, opts?.winLines)
     );
   }
 
-  private encounter(enemy: Enemy, extraOnWin?: () => void): void {
+  private encounter(enemy: Enemy, extraOnWin?: () => void, winLines: QuestionDialogueLine[] = []): void {
     // ignora inimigos mortos/destruídos (overlap pendente do arcade após a vitória)
     if (!enemy.active || enemy.hp <= 0) return;
     if (this.battle.isOpen() || this.dialogue.isOpen()) return;
@@ -185,8 +195,10 @@ export abstract class BaseDuplaScene extends Phaser.Scene {
         // remove o inimigo derrotado do mapa
         this.enemies = this.enemies.filter((e) => e !== enemy);
         enemy.destroy();
-        if (copyLines.length > 0) this.dialogue.start(copyLines);
+        // marca o progresso ANTES do diálogo, pra HUD/quest já refletirem a vitória
         extraOnWin?.();
+        const lines = [...copyLines, ...winLines];
+        if (lines.length > 0) this.dialogue.start(lines);
       },
       onLose: () => this.scene.start("GameOver", { cena: this.scene.key, spawn: this.lastSpawn }),
       onFlee: () => {

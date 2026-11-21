@@ -21,7 +21,7 @@ export class BarScene extends BaseDuplaScene {
   private evy!: Npc;
 
   create(): void {
-    this.setupScene({ width: 960, height: 560, floorColor: 0x3b2a22, spawn: { x: 480, y: 460 } });
+    this.setupScene({ width: 960, height: 560, floorTexture: "floorTexture", spawn: { x: 480, y: 460 } });
 
     // paredes do bar
     const walls = this.physics.add.staticGroup();
@@ -47,12 +47,16 @@ export class BarScene extends BaseDuplaScene {
 
     // 🦊 EVY — barman raposa com corpo de humano, amigável
     this.evy = new Npc(this, 480, 175, "Evy 🦊", 0xc46a2b);
+    const evyPrompt =
+      quest.stage === 2 && quest.kenneditoResolvido
+        ? "Evy — [E] entregar a história e fechar a conta"
+        : "Evy, o barman — [E] conversar";
     this.addZone(
       480,
       210,
       140,
       70,
-      "Evy, o barman — [E] conversar",
+      evyPrompt,
       () => this.talkToEvy()
     );
 
@@ -79,11 +83,16 @@ export class BarScene extends BaseDuplaScene {
           // kennedito resolvido → a Bebida está em jogo: final do prólogo!
           this.dialogue.start(EVY_FINALE_LINES, () => {
             quest.finalizar(); // stage 3 (HUD mostra "concluída ✅")
-            this.scene.start("Ending");
+            this.cameras.main.fadeOut(700, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => this.scene.start("Ending"));
           });
         } else {
           this.dialogue.start(EVY_WAIT_LINES);
         }
+        break;
+      case 3:
+        // pós-final: o bar continua aberto pra exploração
+        this.dialogue.start(EVY_AFTER_ENDING_LINES);
         break;
     }
   }
@@ -109,12 +118,19 @@ const EVY_WAIT_LINES: QuestionDialogueLine[] = [
 
 /** Final do prólogo: a dupla volta com a história completa */
 const EVY_FINALE_LINES: QuestionDialogueLine[] = [
-  { speaker: "npc", text: "vocês voltaram inteiros E com a garrafa. que cliente exemplar. suspeito." },
-  { speaker: "lilly", text: "houve necromancia recreativa. e um cachorro com opinião forte sobre ração." },
-  { speaker: "kielop", text: "resolvido no pedido de desculpas oficial das três crianças. ficou registrado." },
-  { speaker: "npc", text: "então tá. a bebida é por conta da casa. e da história, claro." },
+  { speaker: "npc", text: "voltaram inteiros, com a garrafa e com história. cliente suspeito, mas pagou em narrativa." },
+  { speaker: "lilly", text: "houve necromancia recreativa e um cachorro com opinião forte sobre ração." },
+  { speaker: "kielop", text: "as crianças assinaram um termo. ficou tudo registrado." },
+  { speaker: "npc", text: "então a casa paga a primeira rodada. sentem. o bar fecha pra conversa." },
   { speaker: "lilly", text: "proposto. brindo ao kennedito, que nos ensinou física aplicada." },
-  { speaker: "kielop", text: "e ao bar do evy. onde o prólogo termina sempre com bebida e burocracia." }
+  { speaker: "kielop", text: "e ao bar do Evy, onde o prólogo termina com bebida e burocracia." }
+];
+
+/** Depois do final: o bar continua aberto pra quem quiser passear */
+const EVY_AFTER_ENDING_LINES: QuestionDialogueLine[] = [
+  { speaker: "npc", text: "a primeira rodada foi por conta da casa. a segunda já é burocracia." },
+  { speaker: "lilly", text: "então ficamos pela primeira. e pela conversa." },
+  { speaker: "kielop", text: "o bar fica aberto. a história também." }
 ];
 
 const EVY_CHATTER: QuestionDialogueLine[][] = [

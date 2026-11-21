@@ -35,11 +35,9 @@ export class TrailScene extends BaseDuplaScene {
     this.setupScene({
       width: 1800,
       height: 900,
-      floorColor: 0x1f2a1c,
+      floorTexture: "grassTexture",
       spawn: { x: data?.x ?? 150, y: data?.y ?? 450 }
     });
-    // usar grama na trilha
-    this.setFloorTexture("grassTexture");
 
     const walls = this.physics.add.staticGroup();
     // paredes curvadas formando a trilha
@@ -69,10 +67,8 @@ export class TrailScene extends BaseDuplaScene {
     this.addEnemy(430, 450, TrailScene.BANDIDO, [{ x: 360, y: 450 }, { x: 640, y: 450 }]);
 
     // caminhadinha: luz de vaga-lume decorativa
-    for (const [x, y] of [[400, 320], [1200, 480]] as [number, number][]) {
-      const gl = this.add.circle(x, y, 8, 0xfff176);
-      this.tweens.add({ targets: gl, alpha: 0.2, duration: 600, yoyo: true, repeat: -1 });
-    }
+    for (const [x, y] of [[400, 320], [1200, 480]] as [number, number][])
+      this.add.circle(x, y, 8, 0xfff176).on("pointerdown", () => this.tweens.add({ targets: gl, alpha: 0.2, duration: 600, yoyo: true, repeat: -1 }));
 
     // porta ao fim da trilha
     this.add.rectangle(1750, 450, 40, 120, 0x1a1c2c).setStrokeStyle(2, 0x8d5524);
@@ -82,6 +78,8 @@ export class TrailScene extends BaseDuplaScene {
     // porta a oeste: VOLTA pra praça (antes era caminho só de ida)
     this.add.rectangle(50, 450, 40, 120, 0x1a1c2c).setStrokeStyle(2, 0x8d5524);
     this.add.text(50, 385, "praça 🏙", { fontSize: "10px", color: "#ffd75e" }).setOrigin(0.5);
-    this.addDoor(50, 450, 80, 200, "City", { x: 1270, y: 420 });
+    // spawn seguro: próximo ao centro da praça, longe das paredes curvadas do bandido
+    const safeSpawn = { x: 700, y: 420 };
+    this.addDoor(50, 450, 80, 200, "City", safeSpawn);
   }
 }
